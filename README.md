@@ -19,4 +19,8 @@ $ go get -u github.com/spf13/cobra@latest
 # ngrok
 $ brew install ngrok/ngrok/ngrok
 $ ngrok http 8080
+
+# line sdk
+$ go get -u github.com/line/line-bot-sdk-go/v7/linebot
+
 ```

@@ -2,7 +2,7 @@
 .DS_Store
 .env
 bin/*
-
+config/config.yaml
 
 ## SSL
 *.crt
