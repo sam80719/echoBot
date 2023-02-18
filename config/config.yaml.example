@@ -1,2 +1,7 @@
-channel_secret: ${LINE_CHANNEL_SECRET}
-channel_access_token: ${LINE_CHANNEL_ACCESS_TOKEN}
+line:
+  channel_secret: ${LINE_CHANNEL_SECRET}
+  channel_access_token: ${LINE_CHANNEL_ACCESS_TOKEN}
+mongo:
+  uri: ${MONGODB_URL}
+  name: ${DATABASE_NAME}
+  collection:

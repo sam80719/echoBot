@@ -3,7 +3,7 @@ package handler
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	linebot "github.com/line/line-bot-sdk-go/v7/linebot"
+	line "github.com/line/line-bot-sdk-go/v7/linebot"
 	"github.com/spf13/viper"
 	"log"
 	"net/http"
@@ -11,7 +11,7 @@ import (
 
 type LineBot struct {
 	Viper              *viper.Viper
-	Bot                *linebot.Client
+	Bot                *line.Client
 	ChannelSecret      string
 	ChannelAccessToken string
 }
@@ -25,10 +25,10 @@ func NewLineBot() (*LineBot, error) {
 		return nil, fmt.Errorf("failed to read config file: %v", err)
 	}
 
-	channelSecret := viper.GetString("channel_secret")
-	channelAccessToken := viper.GetString("channel_access_token")
+	channelSecret := viper.GetString("line.channel_secret")
+	channelAccessToken := viper.GetString("line.channel_access_token")
 
-	bot, err := linebot.New(channelSecret, channelAccessToken)
+	bot, err := line.New(channelSecret, channelAccessToken)
 	if err != nil {
 		return nil, fmt.Errorf("failed to initialize linebot: %v", err)
 	}
@@ -49,7 +49,7 @@ func HandleMessage(c *gin.Context) {
 
 	events, err := lineBot.Bot.ParseRequest(c.Request)
 	if err != nil {
-		if err == linebot.ErrInvalidSignature {
+		if err == line.ErrInvalidSignature {
 			c.AbortWithStatus(400)
 		} else {
 			c.AbortWithStatus(500)
@@ -58,25 +58,28 @@ func HandleMessage(c *gin.Context) {
 	}
 
 	for _, event := range events {
-		if event.Type == linebot.EventTypeMessage {
+		if event.Type == line.EventTypeMessage {
 			log.Printf("Received message: %+v\n", event)
 			// handle diff type event
 			switch message := event.Message.(type) {
-			case *linebot.TextMessage:
+			case *line.TextMessage:
 				fmt.Printf("Received text message: %s\n", message.Text)
-			case *linebot.ImageMessage:
+			case *line.ImageMessage:
 				fmt.Println("Received image message")
-			case *linebot.VideoMessage:
+			case *line.VideoMessage:
 				fmt.Println("Received video message")
-			case *linebot.AudioMessage:
+			case *line.AudioMessage:
 				// 收到音訊訊息
 				fmt.Println("Received audio message")
-			case *linebot.LocationMessage:
+			case *line.LocationMessage:
 				// 收到位置訊息
 				fmt.Println("Received location message")
-			case *linebot.StickerMessage:
+			case *line.StickerMessage:
 				// 收到貼圖訊息
 				fmt.Println("Received sticker message")
+			default:
+				// 處理未匹配到的情況
+				fmt.Println("Unknown message type")
 			}
 		}
 	}
