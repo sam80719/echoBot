@@ -15,6 +15,8 @@ $ go get go.mongodb.org/mongo-driver/mongo
 
 # cobra
 $ go get -u github.com/spf13/cobra@latest
+# cobra-cli
+$ go install github.com/spf13/cobra-cli@latest
 
 # ngrok
 $ brew install ngrok/ngrok/ngrok
